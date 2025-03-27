@@ -1,0 +1,3 @@
+FROM neo4j:5.26.0
+ENV NEO4J_AUTH=neo4j/password
+EXPOSE 7474 7687
