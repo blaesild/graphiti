@@ -1,4 +1,4 @@
-FROM neo4j:5.26.0
+FROM neo4j:latest
 ENV NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
 
 # Copy custom configuration file
