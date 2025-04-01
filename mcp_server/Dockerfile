@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install uv for package management
+# Install curl and uv
 RUN apt-get update && apt-get install -y curl && \
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -10,15 +10,25 @@ RUN apt-get update && apt-get install -y curl && \
 # Add uv to PATH
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Copy pyproject.toml and install dependencies
+# Copy requirements file
 COPY pyproject.toml .
+
+# Install dependencies
 RUN uv sync
 
-# Copy application code
+# Copy application files
 COPY graphiti_mcp_server.py .
+COPY .env .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Command to run the application
-CMD ["uv", "run", "graphiti_mcp_server.py"]
+# Create entrypoint script
+RUN echo '#!/bin/sh\n\
+set -a\n\
+. /app/.env\n\
+set +a\n\
+exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["uv", "run", "graphiti_mcp_server.py", "--transport", "sse"]
