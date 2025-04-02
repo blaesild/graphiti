@@ -7,6 +7,13 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
+    environment:
+      - MODEL_NAME=${MODEL_NAME}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - NEO4J_URI=${NEO4J_URI}
+      - NEO4J_USER=${NEO4J_USER}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     ports:
       - "8000:8000"
     command: ["uv", "run", "graphiti_mcp_server.py", "--transport", "sse"]

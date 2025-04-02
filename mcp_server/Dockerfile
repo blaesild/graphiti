@@ -23,12 +23,8 @@ COPY .env .
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Create entrypoint script
-RUN echo '#!/bin/sh\n\
-set -a\n\
-. /app/.env\n\
-set +a\n\
-exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
+# Create a simplified entrypoint script
+RUN echo '#!/bin/sh\nexec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["uv", "run", "graphiti_mcp_server.py", "--transport", "sse"]
