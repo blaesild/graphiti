@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     command: ["uv", "run", "graphiti_mcp_server.py", "--transport", "sse", "--use-custom-entities", "--model", "gpt-4o-mini", "--group-id", "${GROUP_ID}"]
-    restart: "no"
+    restart: unless-stopped
     deploy:
       resources:
         limits:
